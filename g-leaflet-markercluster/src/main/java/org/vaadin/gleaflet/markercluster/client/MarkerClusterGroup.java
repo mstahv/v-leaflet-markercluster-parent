@@ -27,6 +27,13 @@ public class MarkerClusterGroup extends LayerGroup {
 	/*-{
         this.addLayer(marker)
     }-*/;
+    
+    public native final void spiderfyParentCluster(Marker marker) /*-{
+        var parent = this.getVisibleParent(marker);
+        if (parent.getChildCount) {
+            parent.spiderfy();
+        }
+    }-*/;
 
     public native final JavaScriptObject addClusterClickListener(ClusterClickListener listener)
 	/*-{

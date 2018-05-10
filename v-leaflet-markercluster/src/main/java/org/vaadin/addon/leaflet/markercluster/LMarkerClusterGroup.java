@@ -2,12 +2,14 @@ package org.vaadin.addon.leaflet.markercluster;
 
 import com.vaadin.shared.MouseEventDetails;
 import org.vaadin.addon.leaflet.LFeatureGroup;
+import org.vaadin.addon.leaflet.LMarker;
 
 import org.vaadin.addon.leaflet.LeafletClickEvent;
 import org.vaadin.addon.leaflet.LeafletClickListener;
 import org.vaadin.addon.leaflet.markercluster.client.LeafletMarkerClusterState;
 import org.vaadin.addon.leaflet.markercluster.shared.AnimationEndServerRpc;
 import org.vaadin.addon.leaflet.markercluster.shared.MarkerClusterClickRpc;
+import org.vaadin.addon.leaflet.markercluster.shared.MarkerClusterClientRpc;
 import org.vaadin.addon.leaflet.shared.ClickServerRpc;
 import org.vaadin.addon.leaflet.shared.Point;
 
@@ -93,6 +95,10 @@ public class LMarkerClusterGroup extends LFeatureGroup {
 
     public void addMarkerClusterClickListener(MarkerClusterClickListener listener) {
         addListener(LMarkerClusterClickEvent.class, listener, MarkerClusterClickListener.METHOD);
+    }
+
+    public void spiderifyParent(LMarker marker) {
+        getRpcProxy(MarkerClusterClientRpc.class).spiderfyParentCluster(marker);
     }
 
 }

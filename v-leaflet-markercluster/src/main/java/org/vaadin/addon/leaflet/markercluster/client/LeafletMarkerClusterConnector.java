@@ -3,6 +3,7 @@ package org.vaadin.addon.leaflet.markercluster.client;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.vaadin.client.communication.RpcProxy;
+import com.vaadin.shared.Connector;
 import org.peimari.gleaflet.client.*;
 import org.vaadin.addon.leaflet.client.LeafletFeatureGroupConnector;
 import org.vaadin.addon.leaflet.markercluster.LMarkerClusterGroup;
@@ -11,17 +12,32 @@ import org.vaadin.addon.leaflet.markercluster.shared.MarkerClusterClickRpc;
 import org.vaadin.gleaflet.markercluster.client.*;
 
 import com.vaadin.shared.ui.Connect;
+import org.vaadin.addon.leaflet.client.LeafletMarkerConnector;
+import org.vaadin.addon.leaflet.markercluster.shared.MarkerClusterClientRpc;
 
 @Connect(LMarkerClusterGroup.class)
 public class LeafletMarkerClusterConnector extends LeafletFeatureGroupConnector {
 	
-	private MarkerClusterGroup markerClusterGroup;
+    private MarkerClusterGroup markerClusterGroup;
 
     private AnimationEndServerRpc animationEndServerRpc = RpcProxy.create(AnimationEndServerRpc.class, this);
 
     private MarkerClusterClickRpc markerClusterClickRpc = RpcProxy.create(MarkerClusterClickRpc.class, this);
 
     private JavaScriptObject clusterClickListener;
+    
+    MarkerClusterClientRpc clientRpc = new MarkerClusterClientRpc() {
+        @Override
+        public void spiderfyParentCluster(Connector marker) {
+            LeafletMarkerConnector markerConnector = (LeafletMarkerConnector) marker;
+            Marker m = (Marker) markerConnector.getLayer();
+            markerClusterGroup.spiderfyParentCluster(m);
+        }
+    };
+    
+    public LeafletMarkerClusterConnector() {
+        registerRpc(MarkerClusterClientRpc.class, clientRpc);
+    }
 
     public LeafletMarkerClusterState getState() {
         return (LeafletMarkerClusterState) super.getState();
